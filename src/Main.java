@@ -15,6 +15,7 @@ public class Main {
         Scanner myReader = new Scanner(myObj);
         int numOfLines = 3;
         String inputText = null;
+        DictionarySingleton.getInstance();
         while(true) {
            inputText = null;
            int counter = 0;
@@ -46,6 +47,7 @@ public class Main {
 
         System.out.println("\n========Printing the results======");
       //  System.out.println(resultList.size());
+        StringBuilder finalText = new StringBuilder();
         int totalIncorrectWord =0;
         for (int i = 0; i < resultList.size(); i++) {
             Future<Result> future = resultList.get(i);
@@ -53,12 +55,14 @@ public class Main {
                 Result res = future.get();
 
                 totalIncorrectWord +=res.getIncorrectword();
+                finalText.append(res.getModifiedText1());
+                //finalText.append(" ");
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
         }
         System.out.println("Total incorrect words are " + totalIncorrectWord);
-
+        System.out.println("------The complete text read by threads ----\n " + finalText);
     }
 }
