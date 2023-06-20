@@ -11,6 +11,9 @@ class Task implements Callable<Result> {
     private String inputText;
    private int incorrectWords=0;
     private int correctWords =0;
+
+    private StringBuilder modifiedText;
+
     public Task(String inputText) {
         this.inputText =  inputText;
     }
@@ -21,15 +24,23 @@ class Task implements Callable<Result> {
 
         DictionarySingleton inst  = DictionarySingleton.getInstance();
                 String[] myInput = inputText.split(" ");
+                modifiedText = new StringBuilder();
+
                 for (String word : myInput) {
                     word = word.toLowerCase();
-                    if (!inst.map.containsKey(word))
+                    if (!inst.threadSafeSet.contains(word))
+                    {   modifiedText.append(word);
+                        modifiedText.append(" ");
                         incorrectWords++;
+                    }
                     else
+                    {  modifiedText.append(word);
+                        modifiedText.append(" ");
                         correctWords++;
+                    }
                 }
 
 
-        return new Result(this.incorrectWords,this.correctWords );
+        return new Result(this.incorrectWords,this.correctWords, this.modifiedText );
     }
 }
